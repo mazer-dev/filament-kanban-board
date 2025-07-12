@@ -6,10 +6,8 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use MazerDev\FilamentKanbanBoard\Pages\KanbanBoard;
 
-class DummyClass extends KanbanBoard implements HasForms
+class DummyClass extends KanbanBoardPage
 {
-    use InteractsWithForms;
-
     protected static string $model = Model::class;
     protected static string $stepModel = ModelStep::class;
 }
