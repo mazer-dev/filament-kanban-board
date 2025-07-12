@@ -40,7 +40,6 @@
     "autoload": {
         "psr-4": {
             "MazerDev\\FilamentKanbanBoard\\": "src/",
-            "MazerDev\\FilamentKanbanBoard\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
@@ -67,9 +66,6 @@
             "providers": [
                 "MazerDev\\FilamentKanbanBoard\\FilamentKanbanBoardServiceProvider"
             ],
-            "aliases": {
-                "FilamentKanbanBoard": "MazerDev\\FilamentKanbanBoard\\Facades\\FilamentKanbanBoard"
-            }
         }
     },
     "minimum-stability": "dev",
