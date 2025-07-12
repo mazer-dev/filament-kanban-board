@@ -1,6 +1,6 @@
 {
     "name": "mazer-dev/filament-kanban-board",
-    "description": "Add professional Kanban boards to your Filament projects with ease.",
+    "description": "A professional Kanban boards plug in to your Filament projects with ease.",
     "keywords": [
         "mazer",
         "laravel",
@@ -22,7 +22,7 @@
         }
     ],
     "require": {
-        "php": "^8.3",
+        "php": "^8.1",
         "filament/filament": "^4.0",
         "spatie/laravel-package-tools": "^1.15.0",
         "illuminate/contracts": "^10.0|^11.0|^12.0"
