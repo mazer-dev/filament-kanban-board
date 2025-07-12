@@ -39,7 +39,7 @@
     },
     "autoload": {
         "psr-4": {
-            "MazerDev\\FilamentKanbanBoard\\": "src/",
+            "MazerDev\\FilamentKanbanBoard\\": "src/"
         }
     },
     "autoload-dev": {
@@ -65,7 +65,7 @@
         "laravel": {
             "providers": [
                 "MazerDev\\FilamentKanbanBoard\\FilamentKanbanBoardServiceProvider"
-            ],
+            ]
         }
     },
     "minimum-stability": "dev",
