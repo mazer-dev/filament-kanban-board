@@ -1,14 +1,24 @@
-@props(['step'])
+<div class="kanban-column" data-step-id="{{ $step->id }}">
+    <header class="kanban-column-header">
+        <h3 class="kanban-column-title">
+            {{ $step->{static::$stepTitleAttribute} }}
+            <span class="kanban-column-count">
+                {{ $step->{static::$cardsRelationship}?->count() ?? 0 }}
+            </span>
+        </h3>
+        <button type="button"
+            wire:click="createCard({{ $step->id }})"
+        >
+            <x-heroicon-m-plus class="kanban-add-icon"/>
+        </button>
 
-<div class="md:w-[24rem] flex-shrink-0 mb-5 md:min-h-full flex flex-col">
-    @include(static::$stepHeaderView)
+    </header>
 
-    <div
-        data-status-id="{{ $step['id'] }}"
-        class="flex flex-col flex-1 gap-2 p-3 bg-gray-200 dark:bg-gray-800 rounded-xl"
-    >
-        @foreach($step['records'] as $card)
-            @include(static::$cardView)
+    <div class="kanban-column-content"
+         data-sortable-group="{{ $step->id }}"
+         data-sortable-handle=".kanban-card">
+        @foreach($cards as $card)
+            @include(static::$recordView, ['card' => $card])
         @endforeach
     </div>
 </div>

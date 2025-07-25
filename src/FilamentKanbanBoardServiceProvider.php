@@ -67,7 +67,7 @@ class FilamentKanbanBoardServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-//            Css::make('filament-kanban-board-styles', __DIR__ . '/../resources/dist/filament-kanban-board.css'),
+            Css::make('filament-kanban-board-styles', __DIR__ . '/../resources/dist/filament-kanban-board.css'),
 //            Css::make('filament-kanban-board-styles', __DIR__ . '/../resources/css/index.css')
 //                ->loadedOnRequest(),
         ];

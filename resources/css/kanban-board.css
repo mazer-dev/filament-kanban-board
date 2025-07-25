@@ -1,0 +1,177 @@
+@layer components {
+  /* Board Container */
+  .kanban-board {
+    @apply w-full h-full overflow-hidden bg-gray-50;
+  }
+
+  /* Columns Container */
+  .kanban-columns {
+    @apply flex gap-6 p-6 h-full overflow-x-auto;
+    scrollbar-width: thin;
+    scrollbar-color: theme(colors.gray.400) theme(colors.gray.100);
+  }
+
+  .kanban-columns::-webkit-scrollbar {
+    @apply h-2;
+  }
+
+  .kanban-columns::-webkit-scrollbar-track {
+    @apply bg-gray-100 rounded-full;
+  }
+
+  .kanban-columns::-webkit-scrollbar-thumb {
+    @apply bg-gray-400 rounded-full;
+  }
+
+  /* Column */
+  .kanban-column {
+    @apply flex flex-col bg-white rounded-lg shadow-sm border border-gray-200 min-w-80 max-w-80 h-fit max-h-full;
+  }
+
+  /* Column Header */
+  .kanban-column-header {
+    @apply flex items-center justify-between p-4 border-b border-gray-100;
+  }
+
+  .kanban-column-title {
+    @apply text-sm font-semibold text-gray-900;
+  }
+
+  .kanban-column-count {
+    @apply inline-flex items-center justify-center w-6 h-6 text-xs font-medium text-gray-600 bg-gray-100 rounded-full;
+  }
+
+  /* Column Content */
+  .kanban-column-content {
+    @apply flex-1 p-3 space-y-3 overflow-y-auto max-h-96;
+    scrollbar-width: thin;
+    scrollbar-color: theme(colors.gray.300) transparent;
+  }
+
+  .kanban-column-content::-webkit-scrollbar {
+    @apply w-1;
+  }
+
+  .kanban-column-content::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  .kanban-column-content::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+  }
+
+  /* Empty State */
+  .kanban-column-empty {
+    @apply flex items-center justify-center h-32 border-2 border-dashed border-gray-200 rounded-lg;
+  }
+
+  .kanban-empty-text {
+    @apply text-sm text-gray-500;
+  }
+
+  /* Column Footer */
+  .kanban-column-footer {
+    @apply p-3 border-t border-gray-100;
+  }
+
+  .kanban-add-button {
+    @apply flex items-center justify-center w-full gap-2 px-3 py-2 text-sm font-medium text-gray-600 transition-colors border border-dashed border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .kanban-add-icon {
+    @apply w-4 h-4;
+  }
+
+  /* Card */
+  .kanban-card {
+    @apply relative p-3 bg-white border border-gray-200 rounded-lg shadow-sm cursor-pointer transition-all hover:shadow-md hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .kanban-card:hover {
+    @apply transform -translate-y-0.5;
+  }
+
+  /* Card Priority */
+  .kanban-card-priority {
+    @apply absolute top-0 left-0 w-full h-1 rounded-t-lg;
+  }
+
+  .kanban-card-priority--high {
+    @apply bg-red-500;
+  }
+
+  .kanban-card-priority--medium {
+    @apply bg-yellow-500;
+  }
+
+  .kanban-card-priority--low {
+    @apply bg-green-500;
+  }
+
+  /* Card Content */
+  .kanban-card-content {
+    @apply space-y-2;
+  }
+
+  .kanban-card-title {
+    @apply text-sm font-semibold text-gray-900 leading-snug;
+  }
+
+  .kanban-card-description {
+    @apply text-xs text-gray-600 leading-relaxed;
+  }
+
+  /* Card Tags */
+  .kanban-card-tags {
+    @apply flex flex-wrap gap-1 mt-3;
+  }
+
+  .kanban-card-tag {
+    @apply inline-flex items-center px-2 py-1 text-xs font-medium text-white rounded-full;
+  }
+
+  /* Card Footer */
+  .kanban-card-footer {
+    @apply flex items-center justify-between mt-3 pt-2 border-t border-gray-100;
+  }
+
+  .kanban-card-date {
+    @apply flex items-center gap-1 text-xs text-gray-500;
+  }
+
+  .kanban-card-date--overdue {
+    @apply text-red-500;
+  }
+
+  .kanban-card-date-icon {
+    @apply w-3 h-3;
+  }
+
+  .kanban-card-avatar {
+    @apply w-6 h-6 rounded-full border border-gray-200;
+  }
+
+  /* Sortable States */
+  .kanban-card.sortable-ghost {
+    @apply opacity-50;
+  }
+
+  .kanban-card.sortable-chosen {
+    @apply ring-2 ring-primary-500 ring-offset-2;
+  }
+
+  .kanban-column-content.sortable-drag-over {
+    @apply bg-primary-50 border-primary-200;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .kanban-columns {
+      @apply flex-col gap-4 p-4;
+    }
+
+    .kanban-column {
+      @apply min-w-full max-w-full;
+    }
+  }
+}

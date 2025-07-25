@@ -4,7 +4,7 @@
     }
 
     function onEnd() {
-        document.body.classList.remove("drabbing")
+        document.body.classList.remove("dragging")
     }
 
     function setData(dataTransfer, el) {
@@ -13,7 +13,7 @@
 
     function onAdd(e) {
         const cardId = e.item.id
-        const step = e.to.dataset.stepId
+        const step = e.to.dataset.statusId
         const fromOrderedIds = [].slice.call(e.from.children).map(child => child.id)
         const toOrderedIds = [].slice.call(e.to.children).map(child => child.id)
 
@@ -22,7 +22,7 @@
 
     function onUpdate(e) {
         const cardId = e.item.id
-        const step = e.from.dataset.stepId
+        const step = e.from.dataset.statusId
         const orderedIds = [].slice.call(e.from.children).map(child => child.id)
 
         Livewire.dispatch('sort-changed', {cardId, step, orderedIds})
@@ -31,7 +31,7 @@
     document.addEventListener('livewire:navigated', () => {
         const steps = @js($steps->map(fn ($step) => $step['id']))
 
-        steps.forEach(status => Sortable.create(document.querySelector(`[data-status-id='${step}']`), {
+        steps.forEach(step => Sortable.create(document.querySelector(`[data-status-id='${step}']`), {
             group: 'filament-kanban-board',
             ghostClass: 'opacity-50',
             animation: 150,
@@ -43,4 +43,28 @@
             onAdd,
         }))
     })
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar Sortable.js para drag & drop
+    const columns = document.querySelectorAll('.kanban-column-content');
+
+    columns.forEach(column => {
+        new Sortable(column, {
+            group: 'kanban',
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            onEnd: function(evt) {
+                const cardId = evt.item.dataset.cardId;
+                const newStepId = evt.to.dataset.sortableGroup;
+                const newIndex = evt.newIndex;
+
+                @this.moveCard(cardId, newStepId, newIndex);
+            }
+        });
+    });
+});
 </script>

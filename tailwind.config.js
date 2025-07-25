@@ -3,9 +3,9 @@ const preset = require('./vendor/filament/filament/tailwind.config.preset')
 module.exports = {
     presets: [preset],
     content: [
-        './app/Filament/**/*.php',
-        './resources/views/**/*.blade.php',
-        './vendor/filament/**/*.blade.php',
+        "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./src/**/*.php",
     ],
     theme: {
         extend: {
@@ -13,5 +13,12 @@ module.exports = {
                 'pulse-twice': 'pulse 1s cubic-bezier(0, 0, 0.2, 1) 2',
             }
         }
-    }
+    },
+    plugins: [
+        require('@tailwindcss/forms'),
+        require('@tailwindcss/typography'),
+    ],
+    corePlugins: {
+        preflight: false,
+    },
 }

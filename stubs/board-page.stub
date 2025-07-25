@@ -4,10 +4,10 @@ namespace DummyNamespace;
 
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
-use MazerDev\FilamentKanbanBoard\Pages\KanbanBoard;
+use MazerDev\FilamentKanbanBoard\Pages\KanbanBoardPage;
 
 class DummyClass extends KanbanBoardPage
 {
-    protected static string $model = Model::class;
-    protected static string $stepModel = ModelStep::class;
+    protected static string $cardModel = DummyCardModel::class;
+    protected static string $stepsModel = DummyStepModel::class;
 }

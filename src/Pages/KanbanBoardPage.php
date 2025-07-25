@@ -5,6 +5,8 @@ namespace MazerDev\FilamentKanbanBoard\Pages;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Text;
+use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -25,12 +27,20 @@ class KanbanBoardPage extends Page implements HasForms
     protected static string $stepHeaderView = FilamentKanbanBoardPlugin::ID.'::kanban-step-header';
     protected static string $scriptsView = FilamentKanbanBoardPlugin::ID.'::kanban-scripts';
 
-    protected static string $model;
-    protected static string $stepsModel;
+    protected static string $stepModel;
+    protected static string $stepsRelationship = 'cards';
+
+    protected static string $cardsModel;
+    protected static string $cardsRelationship = 'cards';
 
     protected static string $cardTitleAttribute = 'title';
     protected static string $cardStepAttribute = 'step';
-    
+    protected static string $cardStatusAttribute = 'status';
+    protected static string $cardLeadRelationship = 'lead';
+    protected static string $cardLeadNameAttribute = 'name';
+    protected static string $cardAssigneeRelationship = 'user';
+    protected static string $cardAssigneeNameAttribute = 'name';
+
     protected static string $stepTitleAttribute = 'title';
     protected static string $stepIconAttribute = 'icon';
     protected static string $stepDescriptionAttribute = 'description';
@@ -46,7 +56,7 @@ class KanbanBoardPage extends Page implements HasForms
      */
     protected function getSteps(): Collection
     {
-        $steps = static::$stepsModel::steps();
+        $steps = static::$stepModel::steps();
 
         return $steps;
     }
@@ -54,8 +64,28 @@ class KanbanBoardPage extends Page implements HasForms
     protected function getCards(): Collection
     {
         return $this->getEloquentQuery()
-            ->when(method_exists(static::$model, 'scopeOrdered'), fn ($query) => $query->ordered())
+            ->when(method_exists(static::$cardsModel, 'scopeOrdered'), fn ($query) => $query->ordered())
             ->get();
+    }
+
+    public function getR()
+    {
+        return rand(1, 100);
+    }
+
+    protected function renderCard($card, Schema $schema): Schema
+    {
+        return $this->cardSchema($schema)
+            ->record($card);
+    }
+
+    public function cardSchema(Schema $schema): Schema
+    {
+        return $schema
+            ->columns(1)
+            ->schema([
+                Text::make('Override cardInfoList method to render your cards')
+            ]);
     }
 
     protected function getViewData(): array
@@ -86,7 +116,7 @@ class KanbanBoardPage extends Page implements HasForms
 
     protected function getEloquentQuery(): Builder
     {
-        return static::$model::query();
+        return static::$cardsModel::query();
     }
 
     protected function isCardStepAttributeEnum($card): bool
