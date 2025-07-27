@@ -51,6 +51,8 @@ class KanbanBoardPage extends Page implements HasForms
 
     protected string $view = FilamentKanbanBoardPlugin::ID.'::kanban-board';
 
+    public ?array $cardData = [];
+
     protected function getHeaderActions(): array
     {
         return [
@@ -60,7 +62,12 @@ class KanbanBoardPage extends Page implements HasForms
                 ->icon('heroicon-o-plus')
                 ->modalHeading('Criar novo card')
                 ->model(static::$cardsModel)
-                ->schema(fn() => $this->cardForm(new Schema($this))),
+                ->schema(fn() =>
+                    $this->cardForm(new Schema($this))
+                        ->model(static::$cardsModel)
+                        ->statePath('cardData')
+                        ->fill()
+                ),
         ];
     }
 
@@ -98,7 +105,7 @@ class KanbanBoardPage extends Page implements HasForms
             ]);
     }
 
-    public function cardForm(Schema $schema): array | Schema
+    public function cardForm(Schema $schema): Schema
     {
         return $schema
             ->columns(1)
