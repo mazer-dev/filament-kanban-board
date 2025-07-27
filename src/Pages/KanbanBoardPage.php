@@ -2,9 +2,11 @@
 
 namespace MazerDev\FilamentKanbanBoard\Pages;
 
+use Filament\Actions\CreateAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
+use Filament\Schemas\Components\Actions;
 use Filament\Schemas\Components\Text;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
@@ -49,6 +51,19 @@ class KanbanBoardPage extends Page implements HasForms
 
     protected string $view = FilamentKanbanBoardPlugin::ID.'::kanban-board';
 
+    protected function getHeaderActions(): array
+    {
+        return [
+            CreateAction::make()
+                ->label('Criar novo card')
+                ->translateLabel()
+                ->icon('heroicon-o-plus')
+                ->modalHeading('Criar novo card')
+                ->model(static::$cardsModel)
+                ->schema(fn() => $this->cardForm(new Schema($this))),
+        ];
+    }
+
     /**
      * Return the list of the steps to create the kanban board columns.
      *
@@ -68,24 +83,28 @@ class KanbanBoardPage extends Page implements HasForms
             ->get();
     }
 
-    public function getR()
+    protected function renderCardInfoList($card, Schema $schema): Schema
     {
-        return rand(1, 100);
-    }
-
-    protected function renderCard($card, Schema $schema): Schema
-    {
-        return $this->cardSchema($schema)
+        return $this->cardInfoList($schema)
             ->record($card);
     }
 
-    public function cardSchema(Schema $schema): Schema
+    public function cardInfoList(Schema $schema): array | Schema
     {
         return $schema
             ->columns(1)
             ->schema([
                 Text::make('Override cardInfoList method to render your cards')
             ]);
+    }
+
+    public function cardForm(Schema $schema): array | Schema
+    {
+        return $schema
+            ->columns(1)
+            ->schema($this->getEditModalFormSchema($this->editModalRecordId))
+            ->statePath('editModalFormState')
+            ->model($this->editModalRecordId ? static::$cardsModel::find($this->editModalRecordId) : static::$cardsModel);
     }
 
     protected function getViewData(): array

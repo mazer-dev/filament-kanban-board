@@ -6,12 +6,6 @@
                 {{ $step->{static::$cardsRelationship}?->count() ?? 0 }}
             </span>
         </h3>
-        <button type="button"
-            wire:click="createCard({{ $step->id }})"
-        >
-            <x-heroicon-m-plus class="kanban-add-icon"/>
-        </button>
-
     </header>
 
     <div class="kanban-column-content"

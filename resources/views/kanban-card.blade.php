@@ -9,7 +9,7 @@
     @endif
 
     <div class="kanban-card-content">
-        {{ $this->renderCard($card, new \Filament\Schemas\Schema($this)) }}
+        {{ $this->renderCardInfoList($card, new \Filament\Schemas\Schema($this)) }}
 
         @if($card->description)
             <p class="kanban-card-description">
