@@ -175,8 +175,10 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
         $card = static::$cardsModel::find($cardId);
 
         if ($card) {
-            $card->{static::$cardForeignKeyAttribute} = $stepId;
-            $card->save();
+            if ($card->{static::$cardStepAttribute} != $stepId) {
+                $card->{static::$cardForeignKeyAttribute} = $stepId;
+                $card->save();
+            }
         }
     }
     
