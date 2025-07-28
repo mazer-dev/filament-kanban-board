@@ -1,6 +1,6 @@
 <div class="kanban-card"
      data-card-id="{{ $card->id }}"
-     wire:click="editCard({{ $card->id }})"
+{{--     wire:click="viewCardDetails({{ $card->id }})"--}}
      :key="{{ $card->id }}"
 >
 
@@ -29,6 +29,11 @@
     @endif
 
     <footer class="kanban-card-footer">
+{{--        @foreach($this->getCardFooterActions() as $action)--}}
+{{--            @ds($card->id)--}}
+{{--            {{ ($action)(['cardId' => $card->id]) }}--}}
+{{--        @endforeach--}}
+
         @if($card->due_date)
             <span class="kanban-card-date {{ $card->is_overdue ? 'kanban-card-date--overdue' : '' }}">
                 <x-heroicon-m-calendar class="kanban-card-date-icon"/>

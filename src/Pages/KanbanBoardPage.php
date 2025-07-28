@@ -2,12 +2,17 @@
 
 namespace MazerDev\FilamentKanbanBoard\Pages;
 
+use Filament\Actions\Action;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
 use Filament\Actions\CreateAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Filament\Schemas\Components\Actions;
 use Filament\Schemas\Components\Text;
+use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -17,17 +22,19 @@ use MazerDev\FilamentKanbanBoard\Concerns\HasStepChange;
 use MazerDev\FilamentKanbanBoard\FilamentKanbanBoardPlugin;
 use UnitEnum;
 
-class KanbanBoardPage extends Page implements HasForms
+class KanbanBoardPage extends Page implements HasForms, HasActions
 {
     use InteractsWithForms;
+    use InteractsWithActions;
     use HasEditCardModal;
     use HasStepChange;
 
     protected static string|null|\BackedEnum $navigationIcon = 'heroicon-o-view-columns';
-    protected static string $recordView = FilamentKanbanBoardPlugin::ID.'::kanban-card';
-    protected static string $stepView = FilamentKanbanBoardPlugin::ID.'::kanban-step';
-    protected static string $stepHeaderView = FilamentKanbanBoardPlugin::ID.'::kanban-step-header';
-    protected static string $scriptsView = FilamentKanbanBoardPlugin::ID.'::kanban-scripts';
+    protected static string $recordView = FilamentKanbanBoardPlugin::ID . '::kanban-card';
+    protected static string $stepView = FilamentKanbanBoardPlugin::ID . '::kanban-step';
+    protected static string $stepHeaderView = FilamentKanbanBoardPlugin::ID . '::kanban-step-header';
+    protected static string $scriptsView = FilamentKanbanBoardPlugin::ID . '::kanban-scripts';
+    protected static string $cardDetailsView = FilamentKanbanBoardPlugin::ID . '::components.view-card-modal';
 
     protected static string $stepModel;
     protected static string $stepsRelationship = 'cards';
@@ -37,6 +44,7 @@ class KanbanBoardPage extends Page implements HasForms
 
     protected static string $cardTitleAttribute = 'title';
     protected static string $cardStepAttribute = 'step';
+    protected static string $cardForeignKeyAttribute = 'step_id';
     protected static string $cardStatusAttribute = 'status';
     protected static string $cardLeadRelationship = 'lead';
     protected static string $cardLeadNameAttribute = 'name';
@@ -46,10 +54,10 @@ class KanbanBoardPage extends Page implements HasForms
     protected static string $stepTitleAttribute = 'title';
     protected static string $stepIconAttribute = 'icon';
     protected static string $stepDescriptionAttribute = 'description';
-    
+
     protected static string $defaultStepIcon = 'heroicon-o-rectangle-stack';
 
-    protected string $view = FilamentKanbanBoardPlugin::ID.'::kanban-board';
+    protected string $view = FilamentKanbanBoardPlugin::ID . '::kanban-board';
 
     public ?array $cardData = [];
 
@@ -62,13 +70,23 @@ class KanbanBoardPage extends Page implements HasForms
                 ->icon('heroicon-o-plus')
                 ->modalHeading('Criar novo card')
                 ->model(static::$cardsModel)
-                ->schema(fn() =>
-                    $this->cardForm(new Schema($this))
-                        ->model(static::$cardsModel)
-                        ->statePath('cardData')
-                        ->fill()
+                ->schema(fn() => $this->cardForm(new Schema($this))
+                    ->model(static::$cardsModel)
+                    ->statePath('cardData')
+                    ->fill()
                 ),
         ];
+    }
+    
+    public function getCardFooterAction(): Action
+    {
+        return
+            Action::make('teste')
+                ->label('View Card')
+                ->icon('heroicon-o-eye')
+                ->modalHeading('View Card Details')
+                ->record(fn($record) => $record)
+        ;
     }
 
     /**
@@ -86,7 +104,7 @@ class KanbanBoardPage extends Page implements HasForms
     protected function getCards(): Collection
     {
         return $this->getEloquentQuery()
-            ->when(method_exists(static::$cardsModel, 'scopeOrdered'), fn ($query) => $query->ordered())
+            ->when(method_exists(static::$cardsModel, 'scopeOrdered'), fn($query) => $query->ordered())
             ->get();
     }
 
@@ -96,7 +114,7 @@ class KanbanBoardPage extends Page implements HasForms
             ->record($card);
     }
 
-    public function cardInfoList(Schema $schema): array | Schema
+    public function cardInfoList(Schema $schema): array|Schema
     {
         return $schema
             ->columns(1)
@@ -111,7 +129,9 @@ class KanbanBoardPage extends Page implements HasForms
             ->columns(1)
             ->schema($this->getEditModalFormSchema($this->editModalRecordId))
             ->statePath('editModalFormState')
-            ->model($this->editModalRecordId ? static::$cardsModel::find($this->editModalRecordId) : static::$cardsModel);
+            ->model(
+                $this->editModalRecordId ? static::$cardsModel::find($this->editModalRecordId) : static::$cardsModel
+            );
     }
 
     protected function getViewData(): array
@@ -149,4 +169,24 @@ class KanbanBoardPage extends Page implements HasForms
     {
         return $card?->getAttribute(static::$cardStepAttribute) instanceof UnitEnum;
     }
+
+    public function moveCard(int $cardId, int $stepId): void
+    {
+        $card = static::$cardsModel::find($cardId);
+
+        if ($card) {
+            $card->{static::$cardForeignKeyAttribute} = $stepId;
+            $card->save();
+        }
+    }
+    
+    public function viewCardDetails(int $recordId): void
+    {
+        $this->editModalRecordId = $recordId;
+
+        $this->form->fill($this->getEditModalCardData($recordId, $this->cardData));
+
+        $this->dispatch('open-modal', id: 'kanban--view-card-modal');
+    }
+
 }

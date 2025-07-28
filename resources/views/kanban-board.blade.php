@@ -8,6 +8,8 @@
                 ])
             @endforeach
         </div>
+
+        <x-filament-actions::modals />
     </div>
 
     <div wire:ignore>
@@ -15,6 +17,6 @@
     </div>
 
     @unless($disableEditModal)
-{{--        @include('kanban.partials.edit-modal')--}}
+{{--        @include(static::$cardDetailsView)--}}
     @endunless
 </x-filament-panels::page>
