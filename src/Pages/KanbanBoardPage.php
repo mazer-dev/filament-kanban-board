@@ -44,7 +44,8 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
 
     protected static string $cardTitleAttribute = 'title';
     protected static string $cardStepAttribute = 'step';
-    protected static string $cardForeignKeyAttribute = 'step_id';
+    protected static string $cardStepFKAttribute = 'step_id';
+    protected static string $cardOrderAttribute = 'order';
     protected static string $cardStatusAttribute = 'status';
     protected static string $cardLeadRelationship = 'lead';
     protected static string $cardLeadNameAttribute = 'name';
@@ -170,13 +171,14 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
         return $card?->getAttribute(static::$cardStepAttribute) instanceof UnitEnum;
     }
 
-    public function moveCard(int $cardId, int $stepId): void
+    public function moveCard(int $cardId, int $stepId, int $orderIndex): void
     {
+        ds($orderIndex);
         $card = static::$cardsModel::find($cardId);
 
         if ($card) {
-            if ($card->{static::$cardStepAttribute} != $stepId) {
-                $card->{static::$cardForeignKeyAttribute} = $stepId;
+            if ($card->{static::$cardStepFKAttribute} != $stepId) {
+                $card->{static::$cardStepFKAttribute} = $stepId;
                 $card->save();
             }
         }
