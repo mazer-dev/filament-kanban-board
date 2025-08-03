@@ -106,6 +106,7 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
     {
         return $this->getEloquentQuery()
             ->when(method_exists(static::$cardsModel, 'scopeOrdered'), fn($query) => $query->ordered())
+            ->orderBy(static::$cardOrderAttribute)
             ->get();
     }
 
@@ -173,13 +174,20 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
 
     public function moveCard(int $cardId, int $stepId, int $orderIndex): void
     {
-        ds($orderIndex);
+        ds($cardId, $stepId, $orderIndex);
         $card = static::$cardsModel::find($cardId);
 
         if ($card) {
             if ($card->{static::$cardStepFKAttribute} != $stepId) {
                 $card->{static::$cardStepFKAttribute} = $stepId;
-                $card->save();
+            }
+            
+            if ($card->{static::$cardOrderAttribute} != $orderIndex) {
+                $card->{static::$cardOrderAttribute} = $orderIndex;
+            }
+            
+            if ($card->isDirty()) {
+                $card->save();                
             }
         }
     }
