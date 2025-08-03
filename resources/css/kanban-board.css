@@ -6,7 +6,7 @@
 
   /* Columns Container */
   .kanban-columns {
-    @apply flex gap-6 p-6 h-full overflow-x-auto;
+    @apply flex gap-2 p-1 h-full overflow-x-auto;
     scrollbar-width: thin;
     scrollbar-color: theme(colors.gray.400) theme(colors.gray.100);
   }
