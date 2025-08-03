@@ -58,9 +58,9 @@ document.addEventListener('DOMContentLoaded', function() {
             chosenClass: 'sortable-chosen',
             dragClass: 'sortable-drag',
             onEnd: function(evt) {
-                const cardId = evt.item.dataset.cardId;
-                const newStepId = evt.to.dataset.sortableGroup;
-                const newIndex = evt.newIndex;
+                let cardId = evt.item.dataset.cardId;
+                let newStepId = evt.to.dataset.sortableGroup;
+                let newIndex = evt.newIndex;
 
                 @this.moveCard(cardId, newStepId, newIndex);
             }

@@ -102,10 +102,11 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
         return $steps;
     }
 
-    protected function getCards(): Collection
+    protected function getCards($stepId): null | array | Collection
     {
         return $this->getEloquentQuery()
-            ->when(method_exists(static::$cardsModel, 'scopeOrdered'), fn($query) => $query->ordered())
+            ->where(static::$cardStepFKAttribute, $stepId)
+//            ->when(method_exists(static::$cardsModel, 'scopeOrdered'), fn($query) => $query->ordered())
             ->orderBy(static::$cardOrderAttribute)
             ->get();
     }
@@ -138,16 +139,8 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
 
     protected function getViewData(): array
     {
-        $cards = $this->getCards();
-        $steps = $this->getSteps()
-            ->map(function ($step) use ($cards) {
-                $step['records'] = $this->filterCardsByStep($cards, $step);
-
-                return $step;
-            });
-
         return [
-            'steps' => $steps,
+            'steps' => $this->getSteps(),
         ];
     }
 
@@ -174,14 +167,13 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
 
     public function moveCard(int $cardId, int $stepId, int $orderIndex): void
     {
-        ds($cardId, $stepId, $orderIndex);
         $card = static::$cardsModel::find($cardId);
 
         if ($card) {
             if ($card->{static::$cardStepFKAttribute} != $stepId) {
                 $card->{static::$cardStepFKAttribute} = $stepId;
             }
-            
+
             if ($card->{static::$cardOrderAttribute} != $orderIndex) {
                 $card->{static::$cardOrderAttribute} = $orderIndex;
             }

@@ -4,7 +4,7 @@
             @foreach($steps as $step)
                 @include(static::$stepView, [
                     'step' => $step,
-                    'cards' => $step->{static::$cardsRelationship} ?? []
+                    'cards' => $this->getCards($step->id) ?? []
                 ])
             @endforeach
         </div>

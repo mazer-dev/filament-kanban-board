@@ -3,7 +3,7 @@
         <h3 class="kanban-column-title">
             {{ $step->{static::$stepTitleAttribute} }}
             <span class="kanban-column-count">
-                {{ $step->{static::$cardsRelationship}?->count() ?? 0 }}
+                {{ count($cards) ?? 0 }}
             </span>
         </h3>
     </header>
