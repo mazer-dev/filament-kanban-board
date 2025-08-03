@@ -25,7 +25,25 @@
 
   /* Column */
   .kanban-column {
-    @apply flex flex-col bg-white rounded-lg shadow-sm border border-gray-200 min-w-80 max-w-80 h-fit max-h-full;
+    @apply flex flex-col bg-white rounded-lg shadow-sm border border-gray-200 min-w-80 max-w-80 h-fit max-h-full transition-all duration-300 ease-in-out;
+  }
+
+  .kanban-column.collapsed {
+    @apply min-w-16 max-w-16 overflow-hidden;
+  }
+
+  .kanban-column.collapsed .kanban-column-content,
+  .kanban-column.collapsed .kanban-column-footer,
+  .kanban-column.collapsed .kanban-column-count {
+    @apply hidden;
+  }
+
+  .kanban-column.collapsed .kanban-column-title {
+    @apply transform rotate-90 origin-top-left whitespace-nowrap absolute left-8 top-6;
+  }
+
+  .kanban-column.collapsed .kanban-column-header {
+    @apply h-full p-2 justify-center;
   }
 
   /* Column Header */
@@ -39,6 +57,18 @@
 
   .kanban-column-count {
     @apply inline-flex items-center justify-center w-6 h-6 text-xs font-medium text-gray-600 bg-gray-100 rounded-full;
+  }
+
+  .kanban-toggle-collapse {
+    @apply p-1 rounded-md hover:bg-gray-100 cursor-pointer transition-colors flex items-center justify-center;
+  }
+
+  .kanban-toggle-collapse svg {
+    @apply w-4 h-4 text-gray-500 transition-transform duration-200;
+  }
+
+  .kanban-column.collapsed .kanban-toggle-collapse svg {
+    @apply rotate-180;
   }
 
   /* Column Content */
