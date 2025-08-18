@@ -12,17 +12,16 @@
     }
 
     function onAdd(e) {
-        const cardId = e.item.id
-        const step = e.to.dataset.statusId
-        const fromOrderedIds = [].slice.call(e.from.children).map(child => child.id)
-        const toOrderedIds = [].slice.call(e.to.children).map(child => child.id)
+        const cardId = e.item.dataset.cardId
+        const step = e.to.dataset.stepId
+        const newIndex = e.newIndex
 
-        Livewire.dispatch('step-changed', {cardId, step, fromOrderedIds, toOrderedIds})
+        @this.moveCard(cardId, step, newIndex);
     }
 
     function onUpdate(e) {
-        const cardId = e.item.id
-        const step = e.from.dataset.statusId
+        const cardId = e.item.dataset.cardId
+        const step = e.from.dataset.stepId
         const orderedIds = [].slice.call(e.from.children).map(child => child.id)
 
         Livewire.dispatch('sort-changed', {cardId, step, orderedIds})
@@ -30,7 +29,7 @@
 
     // Funções para controlar o colapso vertical de colunas
     function toggleColumnCollapse(column) {
-        const statusId = column.dataset.statusId;
+        const statusId = column.dataset.stepId;
         const isCollapsed = column.classList.toggle('collapsed');
 
         // Salvar estado no localStorage
@@ -39,25 +38,18 @@
 
     function initColumnCollapseState() {
         document.querySelectorAll('.kanban-column').forEach(column => {
-            const statusId = column.dataset.statusId;
+            const statusId = column.dataset.stepId;
 
-            // Adicionar botão de collapse se não existir
-            if (!column.querySelector('.kanban-toggle-collapse')) {
-                const header = column.querySelector('.kanban-column-header');
-                if (header) {
-                    const collapseBtn = document.createElement('button');
-                    collapseBtn.className = 'kanban-toggle-collapse';
-                    collapseBtn.innerHTML = `
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
-                        </svg>
-                    `;
+            const header = column.querySelector('.kanban-column-header');
+
+            if (header) {
+                const collapseBtn = header.querySelector('.kanban-toggle-collapse');
+                if (collapseBtn) {
                     collapseBtn.addEventListener('click', (e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         toggleColumnCollapse(column);
                     });
-                    header.appendChild(collapseBtn);
                 }
             }
 
@@ -69,49 +61,40 @@
         });
     }
 
-    document.addEventListener('livewire:navigated', () => {
-        const steps = @js($steps->map(fn ($step) => $step['id']))
+    function initSortable() {
+        const steps = @js($steps->map(fn ($step) => $step['id']));
 
-        steps.forEach(step => Sortable.create(document.querySelector(`[data-status-id='${step}']`), {
-            group: 'filament-kanban-board',
-            ghostClass: 'opacity-50',
-            animation: 150,
+        steps.forEach(step => {
+            const el = document.querySelector(`.kanban-column[data-step-id='${step}'] .kanban-column-content`);
 
-            onStart,
-            onEnd,
-            onUpdate,
-            setData,
-            onAdd,
-        }))
-
-        // Inicializar estado das colunas colapsáveis
-        setTimeout(initColumnCollapseState, 100);
-    })
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar Sortable.js para drag & drop
-    const columns = document.querySelectorAll('.kanban-column-content');
-
-    columns.forEach(column => {
-        new Sortable(column, {
-            group: 'kanban',
-            animation: 150,
-            ghostClass: 'sortable-ghost',
-            chosenClass: 'sortable-chosen',
-            dragClass: 'sortable-drag',
-            onEnd: function(evt) {
-                let cardId = evt.item.dataset.cardId;
-                let newStepId = evt.to.dataset.sortableGroup;
-                let newIndex = evt.newIndex;
-
-                @this.moveCard(cardId, newStepId, newIndex);
+            if (el) {
+                Sortable.create(el, {
+                    group: 'filament-kanban-board',
+                    ghostClass: 'opacity-50',
+                    animation: 150,
+                    onStart,
+                    onEnd,
+                    onUpdate,
+                    setData,
+                    onAdd,
+                });
             }
         });
+    }
+
+    document.addEventListener('livewire:navigated', () => {
+        // Aguardar o DOM estar pronto
+        setTimeout(() => {
+            initSortable();
+            initColumnCollapseState();
+        }, 100);
     });
 
-    // Inicializar estado das colunas colapsáveis
-    initColumnCollapseState();
-});
+    // Inicialização imediata para primeira carga
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            initSortable();
+            initColumnCollapseState();
+        }, 100);
+    });
 </script>

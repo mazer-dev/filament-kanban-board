@@ -29,21 +29,20 @@
   }
 
   .kanban-column.collapsed {
-    @apply min-w-16 max-w-16 overflow-hidden;
+    @apply min-w-16 max-w-16 min-h-96 overflow-hidden;
   }
 
   .kanban-column.collapsed .kanban-column-content,
-  .kanban-column.collapsed .kanban-column-footer,
-  .kanban-column.collapsed .kanban-column-count {
+  .kanban-column.collapsed .kanban-column-footer {
     @apply hidden;
   }
 
   .kanban-column.collapsed .kanban-column-title {
-    @apply transform rotate-90 origin-top-left whitespace-nowrap absolute left-8 top-6;
+    @apply transform rotate-90 origin-top-left whitespace-nowrap relative left-8 top-6;
   }
 
   .kanban-column.collapsed .kanban-column-header {
-    @apply h-full p-2 justify-center;
+    @apply h-full p-2;
   }
 
   /* Column Header */
@@ -60,7 +59,7 @@
   }
 
   .kanban-toggle-collapse {
-    @apply p-1 rounded-md hover:bg-gray-100 cursor-pointer transition-colors flex items-center justify-center;
+    @apply p-1 rounded-md hover:bg-gray-100 cursor-pointer transition-colors items-center justify-center;
   }
 
   .kanban-toggle-collapse svg {
