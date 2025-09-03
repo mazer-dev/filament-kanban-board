@@ -1,4 +1,4 @@
-# Commercial License Notice
+# Proprietary License Notice
 
 This software is a commercial product intended for sale as an addon for Filament.
 
