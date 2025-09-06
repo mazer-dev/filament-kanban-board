@@ -10,4 +10,28 @@ class DummyClass extends KanbanBoardPage
 {
     protected static string $cardModel = DummyCardModel::class;
     protected static string $stepsModel = DummyStepModel::class;
+
+    /**
+    * If you want to add actions to the card footer,
+    * override this method and return an array of action function names.
+    * Otherwise, you can remove this method.
+    */
+    public function getCardFooterActions(): array
+    {
+        return [
+            'sampleAction',
+        ];
+    }
+
+    /**
+     * Define a method for each action.
+     */
+    public function sampleAction(): Action
+    {
+        return Action::make('sample')
+            ->hiddenLabel()
+            ->icon('heroicon-o-eye')
+            ->modalHeading('View Card Details');
+    }
+
 }
