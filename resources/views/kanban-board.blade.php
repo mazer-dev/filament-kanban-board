@@ -8,15 +8,10 @@
                 ])
             @endforeach
         </div>
-
-        <x-filament-actions::modals />
     </div>
 
-    <div wire:ignore>
-        @include(static::$scriptsView)
-    </div>
+    @include(static::$scriptsView)
 
-    @unless($disableEditModal)
-{{--        @include(static::$cardDetailsView)--}}
-    @endunless
+    <x-filament-actions::modals />
 </x-filament-panels::page>
+
