@@ -24,7 +24,7 @@
         <x-filament::icon-button
             :icon="Heroicon::ChevronDoubleLeft"
             color="gray"
-            :title="__('Contrair a coluna') "
+            :title="__('Collapse') "
         />
 
     </header>
