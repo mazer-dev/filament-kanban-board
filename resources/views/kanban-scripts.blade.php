@@ -89,12 +89,4 @@
             initColumnCollapseState();
         }, 100);
     });
-
-    // Inicialização imediata para primeira carga
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            initSortable();
-            initColumnCollapseState();
-        }, 100);
-    });
 </script>
