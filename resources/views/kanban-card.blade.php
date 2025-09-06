@@ -10,7 +10,7 @@
 
     <footer class="kanban-card-footer">
         @foreach($this->getCardFooterActions() as $action)
-            {{ $this->$action }}
+            {{ ($this->$action)(['cardId' => $card->id]) }}
         @endforeach
     </footer>
 </div>
