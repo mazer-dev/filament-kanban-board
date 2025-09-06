@@ -9,9 +9,8 @@
     </div>
 
     <footer class="kanban-card-footer">
-{{--        @foreach($this->getCardFooterActions() as $action)--}}
-{{--            @ds($card->id)--}}
-{{--            {{ ($action)(['cardId' => $card->id]) }}--}}
-{{--        @endforeach--}}
+        @foreach($this->getCardFooterActions() as $action)
+            {{ $this->$action }}
+        @endforeach
     </footer>
 </div>

@@ -27,6 +27,8 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
     use InteractsWithForms;
     use InteractsWithActions;
 
+    private $cardFooterActionsMethods = [];
+
     protected static string|null|\BackedEnum $navigationIcon = 'heroicon-o-view-columns';
     protected static string $recordView = FilamentKanbanBoardPlugin::ID . '::kanban-card';
     protected static string $stepView = FilamentKanbanBoardPlugin::ID . '::kanban-step';
@@ -76,16 +78,10 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
                 ),
         ];
     }
-    
-    public function getCardFooterActions(): Action
+
+    public function getCardFooterActions(): array
     {
-        return
-            Action::make('teste')
-                ->label('View Card')
-                ->icon('heroicon-o-eye')
-                ->modalHeading('View Card Details')
-                ->record(fn($record) => $record)
-        ;
+        return [];
     }
 
     /**
@@ -100,7 +96,7 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
         return $steps;
     }
 
-    protected function getCards($stepId): null | array | Collection
+    protected function getCards($stepId): null|array|Collection
     {
         return $this->getEloquentQuery()
             ->where(static::$cardStepFKAttribute, $stepId)
@@ -175,13 +171,13 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
             if ($card->{static::$cardOrderAttribute} != $orderIndex) {
                 $card->{static::$cardOrderAttribute} = $orderIndex;
             }
-            
+
             if ($card->isDirty()) {
-                $card->save();                
+                $card->save();
             }
         }
     }
-    
+
     public function viewCardDetails(int $recordId): void
     {
         $this->editModalRecordId = $recordId;
