@@ -77,7 +77,7 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
         ];
     }
     
-    public function getCardFooterAction(): Action
+    public function getCardFooterActions(): Action
     {
         return
             Action::make('teste')
