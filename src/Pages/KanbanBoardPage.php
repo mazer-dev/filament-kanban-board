@@ -26,8 +26,6 @@ class KanbanBoardPage extends Page implements HasForms, HasActions
 {
     use InteractsWithForms;
     use InteractsWithActions;
-    use HasEditCardModal;
-    use HasStepChange;
 
     protected static string|null|\BackedEnum $navigationIcon = 'heroicon-o-view-columns';
     protected static string $recordView = FilamentKanbanBoardPlugin::ID . '::kanban-card';
